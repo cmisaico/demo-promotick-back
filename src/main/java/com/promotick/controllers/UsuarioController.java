@@ -6,6 +6,7 @@ import com.promotick.repositories.CarritoRepository;
 import com.promotick.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,6 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Long id) {
-        int a = 45;
         return usuarioRepository.findById(id)
                 .map(usuario -> ResponseEntity.ok().body(usuario))
                 .orElse(ResponseEntity.notFound().build());
@@ -50,4 +50,5 @@ public class UsuarioController {
 
         return ResponseEntity.ok("Usuario registrado con éxito.");
     }
+
 }

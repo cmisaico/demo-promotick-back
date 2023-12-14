@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UsuarioDetailsService implements UserDetailsService {
     @Autowired
@@ -16,13 +18,19 @@ public class UsuarioDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
-
-        return User.builder()
-                .username(usuario.getEmail())
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+        return usuarioOptional.map(usuario -> User.withUsername(
+                usuario.getEmail())
                 .password(usuario.getContrasenia())
                 .roles("USER")
-                .build();
+                .build())
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
+    }
+
+    public boolean validarCredenciales(String username, String password) {
+        Optional<Usuario> usuarioOptional = usuarioRepository
+                .findByEmailAndContrasenia(username, password);
+
+        return usuarioOptional.isPresent();
     }
 }
