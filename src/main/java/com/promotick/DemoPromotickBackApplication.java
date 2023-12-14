@@ -1,4 +1,4 @@
-package com.promotick.demopromotickback;
+package com.promotick;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
