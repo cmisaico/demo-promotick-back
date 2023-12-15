@@ -29,7 +29,7 @@ phases:
       - echo "Building the Spring Boot application with Gradle"
       - gradle build -x test
       - echo "Building the Docker image..."
-      - docker build -t $REPOSITORY_URI:$IMAGE_TAG -f env/dev/Dockerfile .
+      - docker build -t $REPOSITORY_URI:$IMAGE_TAG -f Dockerfile .
 
   post_build:
     commands:
