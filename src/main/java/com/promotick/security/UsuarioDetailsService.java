@@ -27,10 +27,10 @@ public class UsuarioDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
     }
 
-    public boolean validarCredenciales(String username, String password) {
+    public Optional<Usuario> validarCredenciales(String username, String password) {
         Optional<Usuario> usuarioOptional = usuarioRepository
                 .findByEmailAndContrasenia(username, password);
 
-        return usuarioOptional.isPresent();
+        return usuarioOptional;
     }
 }

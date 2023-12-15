@@ -1,0 +1,43 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+    commands:
+      - echo "Installing gradle"
+      - wget https://services.gradle.org/distributions/gradle-7.4-bin.zip
+      - unzip gradle-7.4-bin.zip
+      - export PATH=$PATH:$PWD/gradle-7.4/bin
+      - export GRADLE_HOME=$PWD/gradle-7.4
+
+  pre_build:
+    commands:
+      - echo "Logging in to Amazon ECR..."
+      - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+      - echo "My account id is $AWS_ACCOUNT_ID"
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - echo "Finish login AWS..."
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/promotick-container
+      - echo "My repository uri is $REPOSITORY_URI"
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - echo "My image tag is $IMAGE_TAG"
+
+  build:
+    commands:
+      - echo "Build started on `date`"
+      - echo "Building the Spring Boot application with Gradle"
+      - gradle build -x test
+      - echo "Building the Docker image..."
+      - docker build -t $REPOSITORY_URI:$IMAGE_TAG -f env/dev/Dockerfile .
+
+  post_build:
+    commands:
+      - echo "Build completed on `date`"
+      - echo "Pushing the Docker image..."
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Writing image definitions file..."
+      - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+
+artifacts:
+  files: imagedefinitions.json

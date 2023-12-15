@@ -1,7 +1,7 @@
 package com.promotick.controllers;
 
 import com.promotick.dto.LoginDTO;
-import com.promotick.dto.LoginResDTO;
+import com.promotick.response.LoginResponse;
 import com.promotick.entities.Usuario;
 import com.promotick.security.UsuarioDetailsService;
 import com.promotick.utils.JwtUtil;
@@ -11,8 +11,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -33,14 +34,15 @@ public class AuthController {
     public ResponseEntity login(@RequestBody LoginDTO loginDTO) {
         try {
             // Validar credenciales
-            if (usuarioDetallesServicio.validarCredenciales(loginDTO.getEmail(), loginDTO.getContrasenia())) {
+            Optional<Usuario> usuarioOptional = usuarioDetallesServicio.validarCredenciales(loginDTO.getEmail(), loginDTO.getContrasenia());
+            if (usuarioOptional.isPresent()) {
                 // Autenticación
                 Authentication authentication = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getContrasenia());
                 String email = authentication.getName();
-                Usuario usuario = new Usuario();
+                Usuario usuario = usuarioOptional.get();
                 usuario.setEmail(email);
                 String token = jwtUtil.createToken(usuario);
-                LoginResDTO loginResDTO = new LoginResDTO(email, token);
+                LoginResponse loginResDTO = new LoginResponse(usuario.getId(), email, token, usuario.getNombre());
                 return ResponseEntity.ok(loginResDTO);
             } else {
                 return ResponseEntity.status(401).body("Nombre de usuario o contraseña incorrectos");

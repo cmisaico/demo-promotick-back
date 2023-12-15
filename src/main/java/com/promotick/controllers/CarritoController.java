@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/carritos")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class CarritoController {
     @Autowired
     private CarritoRepository carritoRepository;
@@ -41,6 +41,15 @@ public class CarritoController {
             } else {
                 return ResponseEntity.badRequest().body("Producto no encontrado.");
             }
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{usuarioId}/registrarCarrito")
+    public ResponseEntity<String> agregarProductosAlCarrito(@PathVariable String usuarioId, @RequestBody List<Producto> productos) {
+        return usuarioRepository.findById((Long.parseLong(usuarioId))).map(usuario -> {
+            usuario.getCarrito().getProductos().addAll(productos);
+            usuarioRepository.save(usuario);
+            return ResponseEntity.ok("Productos agregados al carrito con éxito.");
         }).orElse(ResponseEntity.notFound().build());
     }
 
