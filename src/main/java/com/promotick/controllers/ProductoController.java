@@ -35,10 +35,10 @@ public class ProductoController {
 
     @PostMapping("/agregar")
     public ResponseEntity<String> agregarNuevoProducto(@RequestBody Producto producto) {
-        // Puedes agregar validaciones u lógica específica antes de guardar el producto
+        // Puedes agregar validaciones u logica especifica antes de guardar el producto
         productoRepository.save(producto);
 
-        return ResponseEntity.ok("Producto agregado con éxito.");
+        return ResponseEntity.ok("Producto agregado con exito.");
     }
 
     @GetMapping("/categorias")

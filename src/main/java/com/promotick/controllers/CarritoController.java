@@ -37,7 +37,7 @@ public class CarritoController {
             if (producto != null) {
                 usuario.getCarrito().getProductos().add(producto);
                 usuarioRepository.save(usuario);
-                return ResponseEntity.ok("Producto agregado al carrito con éxito.");
+                return ResponseEntity.ok("Producto agregado al carrito con exito.");
             } else {
                 return ResponseEntity.badRequest().body("Producto no encontrado.");
             }
@@ -49,7 +49,7 @@ public class CarritoController {
         return usuarioRepository.findById((Long.parseLong(usuarioId))).map(usuario -> {
             usuario.getCarrito().getProductos().addAll(productos);
             usuarioRepository.save(usuario);
-            return ResponseEntity.ok("Productos agregados al carrito con éxito.");
+            return ResponseEntity.ok("Productos agregados al carrito con exito.");
         }).orElse(ResponseEntity.notFound().build());
     }
 
@@ -60,7 +60,7 @@ public class CarritoController {
             if (producto != null) {
                 usuario.getCarrito().getProductos().remove(producto);
                 usuarioRepository.save(usuario);
-                return ResponseEntity.ok("Producto eliminado del carrito con éxito.");
+                return ResponseEntity.ok("Producto eliminado del carrito con exito.");
             } else {
                 return ResponseEntity.badRequest().body("Producto no encontrado en el carrito.");
             }

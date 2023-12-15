@@ -53,7 +53,7 @@ public class UsuarioController {
     public ResponseEntity registrarUsuario(@RequestBody Usuario usuario) {
         // Verificar si el usuario ya existe por su email
         if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("El email ya está registrado.");
+            return ResponseEntity.badRequest().body("El email ya esta registrado.");
         }
 
         // Crear un carrito para el nuevo usuario

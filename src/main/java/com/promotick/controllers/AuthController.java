@@ -36,7 +36,7 @@ public class AuthController {
             // Validar credenciales
             Optional<Usuario> usuarioOptional = usuarioDetallesServicio.validarCredenciales(loginDTO.getEmail(), loginDTO.getContrasenia());
             if (usuarioOptional.isPresent()) {
-                // Autenticación
+                // Autenticacion
                 Authentication authentication = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getContrasenia());
                 String email = authentication.getName();
                 Usuario usuario = usuarioOptional.get();
@@ -45,18 +45,18 @@ public class AuthController {
                 LoginResponse loginResDTO = new LoginResponse(usuario.getId(), email, token, usuario.getNombre());
                 return ResponseEntity.ok(loginResDTO);
             } else {
-                return ResponseEntity.status(401).body("Nombre de usuario o contraseña incorrectos");
+                return ResponseEntity.status(401).body("Nombre de usuario o contrasena incorrectos");
             }
         } catch (Exception e) {
-            // Manejar excepciones durante la autenticación, si es necesario
-            return ResponseEntity.status(401).body("Nombre de usuario o contraseña incorrectos");
+            // Manejar excepciones durante la autenticacion, si es necesario
+            return ResponseEntity.status(401).body("Nombre de usuario o contrasena incorrectos");
         }
     }
 
     @Secured("ROLE_USER")
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
-        // Lógica de cierre de sesión
-        return ResponseEntity.ok("Cierre de sesión exitoso");
+        // Logica de cierre de sesion
+        return ResponseEntity.ok("Cierre de sesion exitoso");
     }
 }
