@@ -14,13 +14,13 @@ COPY --chown=gradle:gradle gradle /app/gradle
 WORKDIR /app
 
 # Descargar las dependencias
-RUN ./gradlew --no-daemon dependencies
+RUN gradle --no-daemon dependencies
 
 # Copiar el resto del codigo fuente
 COPY --chown=gradle:gradle src /app/src
 
 # Construir la aplicacion sin ejecutar pruebas para acelerar el proceso
-RUN ./gradlew --no-daemon build -x test
+RUN gradle bootJar --no-daemon build -x test
 
 # Etapa 2: Creacion de la imagen de ejecucion con JRE
 # Usar una imagen JRE mas ligera para la ejecucion
@@ -39,4 +39,4 @@ USER cmisaico
 EXPOSE 8004
 
 # Comando para ejecutar la aplicacion
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+CMD ["java", "-jar", "/app/app.jar"]
