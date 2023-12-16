@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "public.ecr.aws/l5k0n9i2/promotick-container:latest",
+    "Name": "438615502082.dkr.ecr.us-east-1.amazonaws.com/promotick-container:latest",
     "Update": "true"
   },
   "Ports": [
