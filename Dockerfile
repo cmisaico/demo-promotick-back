@@ -36,7 +36,7 @@ RUN useradd -m cmisaico
 USER cmisaico
 
 # Exponer el puerto en el que se ejecutara la aplicacion
-EXPOSE 8080
+EXPOSE 8004
 
 # Comando para ejecutar la aplicacion
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
