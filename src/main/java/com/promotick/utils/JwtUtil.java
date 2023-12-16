@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class JwtUtil {
 
     private final String secret_key = "mysecretkeyallowimportantspacewhitemainbecayseexaplin";
-    private long accessTokenValidity = 24*60*60*1000;
+    private long accessTokenValidity = 12*60*60*1000;
 
     private final JwtParser jwtParser;
 

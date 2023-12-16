@@ -12,7 +12,6 @@ public class Usuario {
     private String contrasenia;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "carrito_id", referencedColumnName = "id")
     private Carrito carrito;
 
     public Long getId() {

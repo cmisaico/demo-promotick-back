@@ -36,7 +36,7 @@ RUN useradd -m cmisaico
 USER cmisaico
 
 # Exponer el puerto en el que se ejecutara la aplicacion
-EXPOSE 8004
+EXPOSE 8080
 
 # Comando para ejecutar la aplicacion
 CMD ["java", "-jar", "/app/app.jar"]

@@ -1,11 +1,13 @@
 package com.promotick.controllers;
 
+import com.promotick.request.UsuarioRequest;
 import com.promotick.response.LoginResponse;
 import com.promotick.entities.Carrito;
 import com.promotick.entities.Usuario;
 import com.promotick.repositories.CarritoRepository;
 import com.promotick.repositories.UsuarioRepository;
 import com.promotick.security.UsuarioDetailsService;
+import com.promotick.services.CarritoService;
 import com.promotick.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private CarritoRepository carritoRepository;
+    private CarritoService carritoService;
 
     @Autowired
     UsuarioDetailsService usuarioDetallesServicio;
@@ -50,24 +52,23 @@ public class UsuarioController {
     }
 
     @PostMapping("/registro")
-    public ResponseEntity registrarUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity registrarUsuario(@RequestBody UsuarioRequest usuarioRequest) {
         // Verificar si el usuario ya existe por su email
-        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+        if (usuarioRepository.findByEmail(usuarioRequest.getUsuario().getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("El email ya esta registrado.");
         }
 
-        // Crear un carrito para el nuevo usuario
         Carrito carrito = new Carrito();
-        carritoRepository.save(carrito);
-        usuario.setCarrito(carrito);
+        carrito.setUsuario(usuarioRequest.getUsuario());
+        Usuario newUsuario = usuarioRepository.save(usuarioRequest.getUsuario());
 
-        // Guardar el nuevo usuario en la base de datos
-        Usuario newUsuario = usuarioRepository.save(usuario);
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(usuario.getEmail(), usuario.getContrasenia());
+        Carrito newCarrito = carritoService.registrarCarrito(newUsuario.getId(), usuarioRequest.getCarrito());
+        newUsuario.setCarrito(newCarrito);
+        usuarioRepository.save(newUsuario);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(usuarioRequest.getUsuario().getEmail(), usuarioRequest.getUsuario().getContrasenia());
         String email = authentication.getName();
         Usuario usuarioToken = new Usuario();
-        usuario.setEmail(email);
+        usuarioRequest.getUsuario().setEmail(email);
         String token = jwtUtil.createToken(usuarioToken);
         LoginResponse loginResDTO = new LoginResponse(newUsuario.getId(), newUsuario.getEmail(), token, newUsuario.getNombre());
 
