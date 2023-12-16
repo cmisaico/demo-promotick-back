@@ -1,16 +1,6 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      java: corretto17
-    commands:
-      - echo "Installing gradle"
-      - wget https://services.gradle.org/distributions/gradle-7.4-bin.zip
-      - unzip gradle-7.4-bin.zip
-      - export PATH=$PATH:$PWD/gradle-7.4/bin
-      - export GRADLE_HOME=$PWD/gradle-7.4
-
   pre_build:
     commands:
       - echo "Logging in to Amazon ECR..."
