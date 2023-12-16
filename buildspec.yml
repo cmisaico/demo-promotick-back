@@ -8,7 +8,7 @@ phases:
       - echo "My account id is $AWS_ACCOUNT_ID"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - echo "Finish login AWS..."
-      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/promotick-container
+      - REPOSITORY_URI=public.ecr.aws/l5k0n9i2/promotick-container
       - echo "My repository uri is $REPOSITORY_URI"
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - echo "My image tag is $IMAGE_TAG"
