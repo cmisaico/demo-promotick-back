@@ -29,7 +29,7 @@ FROM openjdk:17.0.1-jdk-slim
 WORKDIR /app
 
 # Copiar el ejecutable de la etapa de build
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/build/libs/demo-promotick-back-0.0.1-SNAPSHOT.jar ./app.jar
 
 # Definir un usuario no root para mejorar la seguridad
 RUN useradd -m cmisaico
