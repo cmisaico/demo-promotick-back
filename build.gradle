@@ -11,6 +11,10 @@ java {
 	sourceCompatibility = '11'
 }
 
+springBoot {
+	mainClass = 'com.promotick.DemoPromotickBackApplication'
+}
+
 repositories {
 	mavenCentral()
 }
